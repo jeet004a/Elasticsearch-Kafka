@@ -14,10 +14,15 @@
     "description": "",
     "dependencies": {
         "@prisma/client": "^6.4.1",
+        "@types/cors": "^2.8.17",
         "class-transformer": "^0.5.1",
         "class-validator": "^0.14.1",
+        "cors": "^2.8.5",
         "express": "^4.21.2",
         "nodemon": "^3.1.9",
+        "pino-http": "^10.4.0",
+        "pino-pretty": "^13.0.0",
+        "status-codes": "^0.0.1",
         "ts-node": "^10.9.2",
         "typescript": "^5.7.3"
     },
