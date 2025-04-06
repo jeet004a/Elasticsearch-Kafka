@@ -504,7 +504,7 @@ This project is an e-commerce platform that includes all the API functionalities
             {
                 "message": "Error message"
             }
-            ```
+        ```
             
 
 ## Kafka Integration
