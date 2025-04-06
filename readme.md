@@ -505,32 +505,33 @@ This project is an e-commerce platform that includes all the API functionalities
                 "message": "Error message"
             }
             ```
+            
 
-            ## Kafka Integration
+## Kafka Integration
 
-            Kafka is used in this e-commerce application to enable efficient communication between microservices. It acts as a distributed messaging system, ensuring reliable and asynchronous communication. Key benefits of using Kafka in this project include:
-            - **Event-Driven Architecture**: Kafka allows services to publish and subscribe to events, enabling real-time updates and decoupling of services.
-            - **Scalability**: Kafka's distributed nature ensures that the system can handle high volumes of data and scale as the application grows.
-            - **Fault Tolerance**: Kafka ensures message durability and fault tolerance, making the system more resilient to failures.
-            - **Data Streaming**: Kafka enables real-time data streaming for use cases like order tracking, inventory updates, and analytics.
+Kafka is used in this e-commerce application to enable efficient communication between microservices. It acts as a distributed messaging system, ensuring reliable and asynchronous communication. Key benefits of using Kafka in this project include:
+- **Event-Driven Architecture**: Kafka allows services to publish and subscribe to events, enabling real-time updates and decoupling of services.
+- **Scalability**: Kafka's distributed nature ensures that the system can handle high volumes of data and scale as the application grows.
+- **Fault Tolerance**: Kafka ensures message durability and fault tolerance, making the system more resilient to failures.
+- **Data Streaming**: Kafka enables real-time data streaming for use cases like order tracking, inventory updates, and analytics.
 
-            ### Catalog Product Management with Kafka
+### Catalog Product Management with Kafka
 
-            Kafka plays a crucial role in managing product inventory in the catalog service:
-            - **Order Placement**: When a user places an order, the Order Service publishes an event to Kafka. The Catalog Service subscribes to this event and deducts the ordered quantity from the product stock.
-            - **Payment Success**: If the payment is successful, no further action is needed as the stock is already updated.
-            - **Order Cancellation**: If the user cancels the order, the Order Service publishes a cancellation event to Kafka. The Catalog Service listens to this event and reverts the deducted quantity, ensuring accurate stock levels.
+Kafka plays a crucial role in managing product inventory in the catalog service:
+- **Order Placement**: When a user places an order, the Order Service publishes an event to Kafka. The Catalog Service subscribes to this event and deducts the ordered quantity from the product stock.
+- **Payment Success**: If the payment is successful, no further action is needed as the stock is already updated.
+- **Order Cancellation**: If the user cancels the order, the Order Service publishes a cancellation event to Kafka. The Catalog Service listens to this event and reverts the deducted quantity, ensuring accurate stock levels.
 
-            By leveraging Kafka for these workflows, the system ensures consistency and real-time updates across services, even in complex scenarios like order cancellations.
+By leveraging Kafka for these workflows, the system ensures consistency and real-time updates across services, even in complex scenarios like order cancellations.
 
-            ## Microservices Architecture
+## Microservices Architecture
 
-            This project is built on a microservices architecture, which provides the following advantages:
-            - **Decoupled Services**: Each service (User, Cart, Order, Catalog) operates independently, making the system more modular and easier to maintain.
-            - **Scalability**: Individual services can be scaled independently based on their specific load requirements.
-            - **Technology Agnostic**: Each service can use different technologies or programming languages, allowing flexibility in development.
-            - **Fault Isolation**: Failures in one service do not affect the entire system, improving overall reliability.
-            - **Faster Development**: Teams can work on different services simultaneously, speeding up the development process.
+This project is built on a microservices architecture, which provides the following advantages:
+- **Decoupled Services**: Each service (User, Cart, Order, Catalog) operates independently, making the system more modular and easier to maintain.
+- **Scalability**: Individual services can be scaled independently based on their specific load requirements.
+- **Technology Agnostic**: Each service can use different technologies or programming languages, allowing flexibility in development.
+- **Fault Isolation**: Failures in one service do not affect the entire system, improving overall reliability.
+- **Faster Development**: Teams can work on different services simultaneously, speeding up the development process.
 
-            The microservices architecture helps this project grow by enabling faster feature development, improving system reliability, and allowing the platform to scale efficiently as user demands increase.
+The microservices architecture helps this project grow by enabling faster feature development, improving system reliability, and allowing the platform to scale efficiently as user demands increase.
 
