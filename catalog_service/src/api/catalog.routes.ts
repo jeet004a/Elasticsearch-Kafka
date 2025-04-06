@@ -3,10 +3,13 @@ import { CatalogService } from "../services/catalog.service";
 import { CatalogRepository } from "../repository/catalog.repository";
 import { RequestValidator } from "../utils/requestValidator";
 import { CreateProductRequest, UpdateProductRequest } from "../dto/product.dto";
+import { BrokerService } from "../services/broker.service";
 
 const router = express.Router();
 
 export const catalogService=new CatalogService(new CatalogRepository())
+const brokerService=new BrokerService(catalogService)
+brokerService.initializeBroker()
 
 
 router.post('/product',async(req:Request,res:Response,next:NextFunction):Promise<any>=>{
@@ -79,6 +82,17 @@ router.delete('/product/:id',async(req:Request,res:Response,next:NextFunction):P
         const err=error as Error
         return res.status(500).json(err.message)
     } 
+})
+
+
+router.post('/product/stock',async(req:Request,res:Response,next:NextFunction):Promise<any>=>{
+    try {
+        const product=await catalogService.getProductStock(req.body.ids)
+        return res.status(200).json(product)
+    } catch (error) {
+        const err=error as Error
+        return res.status(500).json(err.message)
+    }
 })
 
 export default router

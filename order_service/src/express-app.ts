@@ -6,6 +6,7 @@ import orderRoutes from './routes/order.routes'
 import { httpLogger,HandleErrorWithLogger } from './utils'
 import { MessageBroker } from './utils/broker'
 import { Consumer, Producer } from 'kafkajs'
+import { InitiallizeBroker } from './service/broker.service'
 
 
 // const PORT=process.env.PORT || 4000
@@ -18,26 +19,26 @@ app.use(httpLogger)
 app.use(urlencoded({extended:true}))
 
 //1st Connect to producer and consumer
-const producer=await MessageBroker.connectProducer<Producer>()
+// const producer=await MessageBroker.connectProducer<Producer>()
 
-producer.on('producer.connect',()=>{
-    console.log("Producer connected")
-})
+// producer.on('producer.connect',()=>{
+//     console.log("Producer connected")
+// })
 
-const consumer=await MessageBroker.connectConsumer<Consumer>()
+// const consumer=await MessageBroker.connectConsumer<Consumer>()
 
-consumer.on("consumer.connect",()=>{
-    console.log('Consumer Connected')
-})
-
-
-//2nd Subscribe to the topic or publish the message
-await MessageBroker.subscribe((message)=>{
-    console.log('Consumer recieve the message')
-    console.log("Message",message)
-},"OrderEvents")
+// consumer.on("consumer.connect",()=>{
+//     console.log('Consumer Connected')
+// })
 
 
+// //2nd Subscribe to the topic or publish the message
+// await MessageBroker.subscribe((message)=>{
+//     console.log('Consumer recieve the message')
+//     console.log("Message",message)
+// },"OrderEvents")
+
+await InitiallizeBroker()
 app.use(cartRoutes)
 app.use(orderRoutes)
 

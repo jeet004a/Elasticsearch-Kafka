@@ -3,14 +3,16 @@ import { Cart, CartLineItem, cartLineItems, carts } from "../db/schema";
 // import { CartRepositoryTypes } from "../types/repository.types";
 import {eq} from 'drizzle-orm'
 import { NotFoundError } from "../utils";
+import { CartWithLineItems } from "../dto/cartRequest.dto";
 
 // import { CartRepositoryTypes } from "../types/repository.types";
 export type CartRepositoryType={
     createCart: (customerId: number,lineItem:CartLineItem)=>Promise<number>,
-    findCart: (id:number)=>Promise<Cart>,
+    findCart: (id:number)=>Promise<CartWithLineItems>,
     updateCart: (id:number,qty:number)=>Promise<CartLineItem>,
     deleteCart:(id:number)=>Promise<Boolean>,
-    clearCartData:(id:number)=>Promise<Boolean>
+    clearCartData:(id:number)=>Promise<Boolean>,
+    findCartByProductId:(customerId:number,productId:number)=>Promise<CartLineItem>
 }
 
 
@@ -18,12 +20,15 @@ const createCart=async(
     customerId:number,
     {itemName,price,productId,qty,variant}:CartLineItem
 ):Promise<number>=>{
+
+    console.log('B',customerId)
     const result=await DB.insert(carts).values({customerId:customerId}).returning().onConflictDoUpdate({
         target:carts.customerId,
         set:{updatedAt:new Date()}
     })
 
     const [{id}]=result
+
 
     if(id>0){
         await DB.insert(cartLineItems).values({
@@ -40,7 +45,7 @@ const createCart=async(
 }
 
 
-const findCart=async(id:number):Promise<Cart>=>{
+const findCart=async(id:number):Promise<CartWithLineItems>=>{
     const  cart=await DB.query.carts.findFirst({
         where:(carts,{eq})=>eq(carts.customerId,id),
         with:{
@@ -57,12 +62,16 @@ const findCart=async(id:number):Promise<Cart>=>{
 
 
 
-const updateCart=async(id: number,qty:number):Promise<CartLineItem>=>{
+const updateCart=async(id: number,qty:number):Promise<any>=>{
     const [CartLineItem]=await DB.update(cartLineItems).set({
         qty:qty
     }).where(eq(cartLineItems.id,id)).returning()
 
+    // console.log('xxx',)
+
     return CartLineItem
+
+//   return cartLineItem;
 }
 
 const deleteCart=async(id: number):Promise<Boolean>=>{
@@ -72,8 +81,21 @@ const deleteCart=async(id: number):Promise<Boolean>=>{
 
 
 const clearCartData=async(id:number):Promise<Boolean>=>{
-    await DB.delete(carts).where(eq(carts.id,id)).returning()
+    await DB.delete(carts).where(eq(carts.customerId,id)).returning()
     return true
+}
+
+const findCartByProductId=async(customerId:number,productId:number):Promise<CartLineItem>=>{
+    const cart=await DB.query.carts.findFirst({
+        where: (carts,{eq})=>eq(carts.customerId,customerId),
+        with:{
+            lineItems: true
+        }
+    })
+
+    let lineItems=cart?.lineItems.find((item)=>item.productId===productId)
+
+    return lineItems as CartLineItem
 }
 
 export const CartRepository: CartRepositoryType = {
@@ -82,6 +104,7 @@ export const CartRepository: CartRepositoryType = {
     updateCart,
     deleteCart,
     clearCartData,
+    findCartByProductId,
   };
 
 

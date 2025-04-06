@@ -1,5 +1,5 @@
 import { ExpressApp } from './express-app';
-const PORT=process.env.PORT || 4000
+const PORT=process.env.PORT || 5000
 import { logger } from './utils';
 
 export const StartServer = async () => {

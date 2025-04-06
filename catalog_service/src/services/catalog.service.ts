@@ -1,4 +1,5 @@
 import { ICatalogRepository } from "../interface/catalogRepository.interface";
+import { OrderWithLineItems } from "../types/message.types";
 
 export class CatalogService{
 
@@ -39,6 +40,36 @@ export class CatalogService{
     async deleteProduct(id: number){
         const reponse=await this._repository.delete(id)
         return reponse
+    }
+
+
+    async getProductStock(ids:number[]){
+        const products=await this._repository.findStock(ids)
+        if(!products){
+            throw new Error("Unable to find product stocks");
+            
+        }
+        return products
+    }
+
+    async handleBrokerMessage(message:any){
+        // console.log('Catalog Service received from message',message)
+        // console.log('Hello')
+        const orderData=message.data as OrderWithLineItems
+
+        const {orderItems}=orderData
+        orderItems.forEach(async (item)=>{
+            // console.log("Updating stocks for product",item.productId,item.qty)
+            const product=await this.getProduct(item.productId)
+
+            if(!product){
+                console.log("Product not found during stock update for create order",item.productId)
+            }else{
+                const updateStock=product.stock-item.qty
+                await this.updateProduct({...product,stock:updateStock})
+            }
+        })
+
     }
 
 }
